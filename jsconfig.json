@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es5",
+		"moduleResolution": "node",
+		"declaration": false,
+		"noImplicitAny": false,
+		"jsx": "react",
+		"suppressImplicitAnyIndexErrors": true,
+		"ignoreDeprecations": "5.0",
+		"skipLibCheck": true,
+		"baseUrl": "./",
+		"paths": {
+			"Components/*": [
+				"@university-of-missouri/mizzou-design-system/dist/es5/components/*"
+			]
+		},
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"outDir": "./dist/",
+		"resolveJsonModule": true
+	},
+	"include": [ "src/**/*", "types/**/*", "*" ],
+	"compileOnSave": false
+}
