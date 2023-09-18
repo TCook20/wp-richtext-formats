@@ -1,0 +1,13 @@
+cache/*
+/vendor/
+.vscode/*
+node_modules/
+*.DS_Store
+.wp-env.json
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
