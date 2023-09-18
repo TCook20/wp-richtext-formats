@@ -1,5 +1,5 @@
 {
-	"name": "mizzou/miz-richtext-formats",
+	"name": "mizzou-wordpress/miz-richtext-formats",
 	"description": "A WordPress Plugin that adds custom RichText formats to Block Editor.",
 	"type": "wordpress-plugin",
 	"authors": [
