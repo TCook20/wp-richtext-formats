@@ -1,5 +1,5 @@
 import { RichTextToolbarButton } from '@wordpress/block-editor';
-import { Button, Modal } from '@wordpress/components';
+import { Button, Modal, SearchControl } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { applyFormat, create, insert } from '@wordpress/rich-text';
 
@@ -8,9 +8,11 @@ import axios from 'axios';
 const EditMaterialIcon = ( { isActive, onChange, value } ) => {
 	const [ responseData, setResponseData ] = useState();
 	const [ iconList, setIconList ] = useState( [] );
+	const [ filterTerm, setFilterTerm ] = useState( '' );
 	const [ showPopover, setShowPopover ] = useState( false );
 
 	let iconGallery;
+	let filteredList;
 	const iconMap = [];
 
 	const codepointsUrl =
@@ -38,6 +40,12 @@ const EditMaterialIcon = ( { isActive, onChange, value } ) => {
 		setIconList( iconMap );
 	}, [ iconMap ] );
 
+	if ( filterTerm !== '' ) {
+		filteredList = iconList.filter( ( icon ) => {
+			return icon.includes( filterTerm );
+		} );
+	}
+
 	const iconSelectorHandler = ( selectedValue ) => {
 		setShowPopover( false );
 
@@ -53,8 +61,19 @@ const EditMaterialIcon = ( { isActive, onChange, value } ) => {
 		onChange( insert( value, toInsert ) );
 	};
 
-	if ( iconList ) {
+	if ( iconList && ! filteredList ) {
 		iconGallery = iconList.map( ( icon, i ) => (
+			<Button
+				size="compact"
+				key={ i }
+				label={ icon }
+				onClick={ () => iconSelectorHandler( icon ) }
+			>
+				<i className="miz-icon miz-icon--xl material-icons">{ icon }</i>
+			</Button>
+		) );
+	} else if ( filteredList ) {
+		iconGallery = filteredList.map( ( icon, i ) => (
 			<Button
 				size="compact"
 				key={ i }
@@ -85,6 +104,12 @@ const EditMaterialIcon = ( { isActive, onChange, value } ) => {
 				>
 					<>
 						<p>Select an icon to insert.</p>
+						<SearchControl
+							value={ filterTerm }
+							onChange={ ( newFilter ) =>
+								setFilterTerm( newFilter )
+							}
+						/>
 						{ iconGallery }
 					</>
 				</Modal>
