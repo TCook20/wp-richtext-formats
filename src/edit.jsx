@@ -1,48 +1,24 @@
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { Button, Modal, SearchControl } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { applyFormat, create, insert } from '@wordpress/rich-text';
 
-import axios from 'axios';
+import googleMetadata from '../inc/material-icons.json';
 
 const EditMaterialIcon = ( { isActive, onChange, value } ) => {
-	const [ responseData, setResponseData ] = useState();
-	const [ iconList, setIconList ] = useState( [] );
+	const [ iconList, setIconList ] = useState( googleMetadata.icons );
 	const [ filterTerm, setFilterTerm ] = useState( '' );
 	const [ showPopover, setShowPopover ] = useState( false );
 
 	let iconGallery;
 	let filteredList;
-	const iconMap = [];
-
-	const codepointsUrl =
-		'https://raw.githubusercontent.com/google/material-design-icons/master/font/MaterialIcons-Regular.codepoints';
-
-	useEffect( () => {
-		axios
-			.get( codepointsUrl )
-			.then( ( response ) =>
-				setResponseData( response.data.split( '\n' ) )
-			)
-			.catch( ( error ) => {
-				console.log( 'Error fetching and parsing data', error );
-			} );
-	}, [] );
-
-	if ( responseData ) {
-		responseData.map( ( line ) => {
-			const entry = line.split( ' ' );
-			iconMap.push( entry[ 0 ] );
-		} );
-	}
-
-	useEffect( () => {
-		setIconList( iconMap );
-	}, [ iconMap ] );
 
 	if ( filterTerm !== '' ) {
 		filteredList = iconList.filter( ( icon ) => {
-			return icon.includes( filterTerm );
+			return (
+				icon.name.includes( filterTerm ) ||
+				icon.tags.includes( filterTerm )
+			);
 		} );
 	}
 
@@ -66,10 +42,12 @@ const EditMaterialIcon = ( { isActive, onChange, value } ) => {
 			<Button
 				size="compact"
 				key={ i }
-				label={ icon }
-				onClick={ () => iconSelectorHandler( icon ) }
+				label={ icon.name }
+				onClick={ () => iconSelectorHandler( icon.name ) }
 			>
-				<i className="miz-icon miz-icon--xl material-icons">{ icon }</i>
+				<i className="miz-icon miz-icon--xl material-icons">
+					{ icon.name }
+				</i>
 			</Button>
 		) );
 	} else if ( filteredList ) {
@@ -77,10 +55,12 @@ const EditMaterialIcon = ( { isActive, onChange, value } ) => {
 			<Button
 				size="compact"
 				key={ i }
-				label={ icon }
-				onClick={ () => iconSelectorHandler( icon ) }
+				label={ icon.name }
+				onClick={ () => iconSelectorHandler( icon.name ) }
 			>
-				<i className="miz-icon miz-icon--xl material-icons">{ icon }</i>
+				<i className="miz-icon miz-icon--xl material-icons">
+					{ icon.name }
+				</i>
 			</Button>
 		) );
 	}
